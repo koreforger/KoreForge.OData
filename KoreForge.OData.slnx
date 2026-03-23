@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/KF.OData/KF.OData.csproj" />
+    <Project Path="src/KF.OData.Generators/KF.OData.Generators.csproj" />
+  </Folder>
+  <Folder Name="/tst/">
+    <Project Path="tst/KF.OData.Tests/KF.OData.Tests.csproj" />
+    <Project Path="tst/KF.OData.Integration.Tests/KF.OData.Integration.Tests.csproj" />
+  </Folder>
+</Solution>
