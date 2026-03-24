@@ -166,6 +166,24 @@ public class ODataCrudTests : IAsyncLifetime
         get!.Name.Should().Be("UpdatedGizmo");
     }
 
+    [Fact]
+    public async Task Put_DeniedProperty_ReturnsBadRequest()
+    {
+        // CreatedBy is marked DenyPut = true — changing it should fail
+        var updated = new { OrderId = 1, ProductId = 1, Quantity = 10, CreatedBy = "hacker" };
+        var response = await _client.PutAsJsonAsync("/odata/TestCatalog/Orders(1)", updated);
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+    }
+
+    [Fact]
+    public async Task Put_DeniedProperty_SameValue_Succeeds()
+    {
+        // CreatedBy unchanged — Put should succeed
+        var updated = new { OrderId = 1, ProductId = 1, Quantity = 10, CreatedBy = "test" };
+        var response = await _client.PutAsJsonAsync("/odata/TestCatalog/Orders(1)", updated);
+        response.StatusCode.Should().Be(HttpStatusCode.NoContent);
+    }
+
     // ── DELETE ──
 
     [Fact]

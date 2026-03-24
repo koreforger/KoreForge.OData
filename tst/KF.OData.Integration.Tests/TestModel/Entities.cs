@@ -21,7 +21,7 @@ public class Order
     public int Quantity { get; set; }
     public DateTime CreatedUtc { get; set; } = DateTime.UtcNow;
 
-    [ODataPropertyRestriction(DenyPatch = true)]
+    [ODataPropertyRestriction(DenyPatch = true, DenyPut = true)]
     public string CreatedBy { get; set; } = "system";
 }
 

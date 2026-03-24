@@ -124,6 +124,19 @@ public abstract class KoreForgeODataController<TContext, TEntity, TKey> : ODataC
         if (existing is null)
             return NotFound();
 
+        // Enforce property restrictions
+        if (_putDenied.Count > 0)
+        {
+            var existingEntry = _context.Entry(existing);
+            foreach (var prop in _putDenied)
+            {
+                var currentValue = existingEntry.Property(prop).CurrentValue;
+                var incomingValue = _context.Entry(update).Property(prop).CurrentValue;
+                if (!Equals(currentValue, incomingValue))
+                    return BadRequest($"Property '{prop}' cannot be modified via PUT.");
+            }
+        }
+
         OnBeforeReplace(existing, update);
         _context.Entry(existing).CurrentValues.SetValues(update);
         await _context.SaveChangesAsync(ct);
