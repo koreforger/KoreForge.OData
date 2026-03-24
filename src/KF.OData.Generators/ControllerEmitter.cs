@@ -27,15 +27,18 @@ internal static class ControllerEmitter
         sb.AppendLine("using Microsoft.EntityFrameworkCore;");
         sb.AppendLine();
 
-        var generatedNamespace = $"{context.ContextNamespace}.Generated.Controllers";
+        var generatedNamespace = $"{context.ContextNamespace}.Controllers";
         sb.AppendLine($"namespace {generatedNamespace};");
         sb.AppendLine();
 
         var controllerName = $"{entity.EntityTypeName}Controller";
+        var routeSegment = entity.Schema is not null
+            ? $"{context.ContextPrefix}/{entity.Schema}"
+            : context.ContextPrefix;
 
         sb.AppendLine($"/// <summary>");
         sb.AppendLine($"/// Auto-generated OData controller for <see cref=\"{entity.EntityTypeFullName}\"/>.");
-        sb.AppendLine($"/// Provides full CRUD via /odata/{context.ContextPrefix}/{entity.PropertyName}.");
+        sb.AppendLine($"/// Provides full CRUD via /odata/{routeSegment}/{entity.PropertyName}.");
         sb.AppendLine($"/// </summary>");
         sb.AppendLine($"public partial class {controllerName} : KoreForgeODataController<{context.ContextTypeFullName}, {entity.EntityTypeFullName}, {entity.KeyTypeName ?? "int"}>");
         sb.AppendLine("{");

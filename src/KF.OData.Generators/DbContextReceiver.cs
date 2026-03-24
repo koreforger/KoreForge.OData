@@ -1,29 +1,30 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
-using System.Text;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace KF.OData.Generators;
 
 /// <summary>
-/// Collects DbContext classes that have DbSet properties -- candidates for OData controller generation.
+/// Collects [assembly: GenerateODataFor(typeof(...))] attribute usages for OData controller generation.
 /// </summary>
 internal sealed class DbContextReceiver : ISyntaxReceiver
 {
-    public List<ClassDeclarationSyntax> CandidateContexts { get; } = new();
+    public List<AttributeSyntax> CandidateAttributes { get; } = new();
 
     public void OnVisitSyntaxNode(SyntaxNode syntaxNode)
     {
-        if (syntaxNode is ClassDeclarationSyntax classDecl)
+        if (syntaxNode is AttributeListSyntax attributeList
+            && attributeList.Target?.Identifier.ValueText == "assembly")
         {
-            // Quick filter: check if any base type looks like DbContext
-            if (classDecl.BaseList?.Types.Count > 0)
+            foreach (var attribute in attributeList.Attributes)
             {
-                CandidateContexts.Add(classDecl);
+                var name = attribute.Name.ToString();
+                if (name.EndsWith("GenerateODataFor", StringComparison.Ordinal)
+                    || name.EndsWith("GenerateODataForAttribute", StringComparison.Ordinal))
+                {
+                    CandidateAttributes.Add(attribute);
+                }
             }
         }
     }

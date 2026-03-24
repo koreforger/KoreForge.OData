@@ -22,6 +22,8 @@ internal static class DbContextAnalyzer
         if (!InheritsFrom(contextSymbol, DbContextFullName))
             return null;
 
+        var contextNamespace = contextSymbol.ContainingNamespace.ToDisplayString();
+        var contextPrefix = DbContextInfo.ComputePrefix(contextSymbol.Name);
         var entitySets = new List<EntitySetInfo>();
 
         // Find all DbSet<T> properties
@@ -43,6 +45,7 @@ internal static class DbContextAnalyzer
             var isIgnored = HasAttribute(entityType, ODataIgnoreFullName);
             var authorizeAttr = GetAttribute(entityType, ODataAuthorizeFullName);
             var keyInfo = FindPrimaryKey(entityType);
+            var schema = DeriveSchema(entityType, contextNamespace, contextPrefix);
 
             entitySets.Add(new EntitySetInfo(
                 entityTypeName: entityType.Name,
@@ -56,7 +59,8 @@ internal static class DbContextAnalyzer
                 createPolicy: GetNamedArgument(authorizeAttr, "CreatePolicy"),
                 updatePolicy: GetNamedArgument(authorizeAttr, "UpdatePolicy"),
                 deletePolicy: GetNamedArgument(authorizeAttr, "DeletePolicy"),
-                roles: GetNamedArgument(authorizeAttr, "Roles")
+                roles: GetNamedArgument(authorizeAttr, "Roles"),
+                schema: schema
             ));
         }
 
@@ -66,7 +70,7 @@ internal static class DbContextAnalyzer
         return new DbContextInfo(
             contextTypeName: contextSymbol.Name,
             contextTypeFullName: contextSymbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat).Replace("global::", ""),
-            contextNamespace: contextSymbol.ContainingNamespace.ToDisplayString(),
+            contextNamespace: contextNamespace,
             entitySets: entitySets
         );
     }
@@ -135,5 +139,19 @@ internal static class DbContextAnalyzer
         }
 
         return (null, null);
+    }
+
+    private static string? DeriveSchema(INamedTypeSymbol entityType, string contextNamespace, string contextPrefix)
+    {
+        var entityNs = entityType.ContainingNamespace.ToDisplayString();
+        var expectedPrefix = contextNamespace + "." + contextPrefix;
+
+        if (entityNs.Length > expectedPrefix.Length
+            && entityNs.StartsWith(expectedPrefix + ".", StringComparison.Ordinal))
+        {
+            return entityNs.Substring(expectedPrefix.Length + 1);
+        }
+
+        return null;
     }
 }

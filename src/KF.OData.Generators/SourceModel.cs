@@ -23,6 +23,7 @@ internal sealed class EntitySetInfo
     public string? UpdatePolicy { get; }
     public string? DeletePolicy { get; }
     public string? Roles { get; }
+    public string? Schema { get; }
 
     public EntitySetInfo(
         string entityTypeName,
@@ -36,7 +37,8 @@ internal sealed class EntitySetInfo
         string? createPolicy,
         string? updatePolicy,
         string? deletePolicy,
-        string? roles)
+        string? roles,
+        string? schema)
     {
         EntityTypeName = entityTypeName;
         EntityTypeFullName = entityTypeFullName;
@@ -50,6 +52,7 @@ internal sealed class EntitySetInfo
         UpdatePolicy = updatePolicy;
         DeletePolicy = deletePolicy;
         Roles = roles;
+        Schema = schema;
     }
 }
 
@@ -64,6 +67,18 @@ internal sealed class DbContextInfo
     public string ContextPrefix { get; }
     public List<EntitySetInfo> EntitySets { get; }
 
+    /// <summary>
+    /// Strips "DbContext" or "Context" suffix to derive the route prefix.
+    /// </summary>
+    public static string ComputePrefix(string contextTypeName)
+    {
+        if (contextTypeName.EndsWith("DbContext", StringComparison.Ordinal))
+            return contextTypeName.Substring(0, contextTypeName.Length - "DbContext".Length);
+        if (contextTypeName.EndsWith("Context", StringComparison.Ordinal))
+            return contextTypeName.Substring(0, contextTypeName.Length - "Context".Length);
+        return contextTypeName;
+    }
+
     public DbContextInfo(
         string contextTypeName,
         string contextTypeFullName,
@@ -74,10 +89,6 @@ internal sealed class DbContextInfo
         ContextTypeFullName = contextTypeFullName;
         ContextNamespace = contextNamespace;
         EntitySets = entitySets;
-
-        // Derive prefix: "SalesContext" -> "Sales", "AlertsDbContext" -> "AlertsDb"
-        ContextPrefix = contextTypeName.EndsWith("Context", StringComparison.Ordinal)
-            ? contextTypeName.Substring(0, contextTypeName.Length - "Context".Length)
-            : contextTypeName;
+        ContextPrefix = ComputePrefix(contextTypeName);
     }
 }
