@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="KoreForge.OData" Version="0.0.*-*" />
+    <PackageReference Include="KoreForge.OData.Generators" Version="0.0.*-*"
+                      OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+  </ItemGroup>
+
+  <!--
+    Add a ProjectReference to your KoreForge Data library so the source
+    generator can see the DbContext type.  Example:
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\KF.Data\src\KF.Data\KF.Data.csproj" />
+    </ItemGroup>
+  -->
+
+</Project>

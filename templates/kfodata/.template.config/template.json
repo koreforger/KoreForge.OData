@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "KoreForge",
+  "classifications": [ "Library", "OData", "EFCore" ],
+  "identity": "KoreForge.OData.Consumer.Template",
+  "name": "KoreForge OData Library",
+  "shortName": "kfodata",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "description": "OData controller library that references a KoreForge Data project. Generates CRUD controllers via source generator. Add a ProjectReference to your data library after scaffolding.",
+  "sourceName": "KF.OData.Alerts",
+  "preferNameDirectory": true,
+  "symbols": {
+    "DatabaseShort": {
+      "type": "parameter",
+      "datatype": "string",
+      "description": "Short database name matching the DatabaseShort used in kfdata (e.g. Alerts, Staff). Used in DbContext class name ({DatabaseShort}DbContext).",
+      "defaultValue": "Alerts",
+      "replaces": "Alerts",
+      "fileRename": "Alerts"
+    },
+    "DataNamespace": {
+      "type": "parameter",
+      "datatype": "string",
+      "description": "Root namespace of the data library where the DbContext lives (e.g. KF.Data, MyCompany.Data).",
+      "defaultValue": "KF.Data",
+      "replaces": "KF.Data"
+    }
+  },
+  "sources": [
+    {
+      "modifiers": [
+        {
+          "exclude": [
+            ".git/**", ".template.config/**",
+            "**/bin/**", "**/obj/**", "artifacts/**"
+          ]
+        }
+      ]
+    }
+  ]
+}
