@@ -31,7 +31,8 @@ internal static class ControllerEmitter
         sb.AppendLine($"namespace {generatedNamespace};");
         sb.AppendLine();
 
-        var controllerName = $"{entity.EntityTypeName}Controller";
+        var schemaPrefix = entity.Schema?.Replace(".", "") ?? "";
+        var controllerName = $"{schemaPrefix}{entity.EntityTypeName}Controller";
         var routeSegment = entity.Schema is not null
             ? $"{context.ContextPrefix}/{entity.Schema}"
             : context.ContextPrefix;

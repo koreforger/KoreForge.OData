@@ -273,12 +273,82 @@ namespace MyApp
     {
         var (output, _) = RunGenerator(SchemaAwareContext);
 
-        var channelSource = output["ChannelController.g.cs"];
+        var channelSource = output["NotificationChannelController.g.cs"];
         channelSource.Should().Contain("odata/Alerts/Notification/Channels");
+        channelSource.Should().Contain("class NotificationChannelController");
 
         var auditSource = output["AuditTrailController.g.cs"];
         auditSource.Should().Contain("odata/Alerts/AuditTrails");
         auditSource.Should().NotContain("odata/Alerts/Notification");
+    }
+
+    [Fact]
+    public void Generator_SchemaPrefix_PreventsControllerNameCollision()
+    {
+        // Two schemas each with a "Channel" entity — must produce separate controllers
+        var source = @"
+using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
+using KF.OData.Attributes;
+
+[assembly: GenerateODataFor(typeof(MyApp.MultiDbContext))]
+
+namespace MyApp.Multi.Notification
+{
+    public class Channel
+    {
+        [Key]
+        public int ChannelId { get; set; }
+        public string Name { get; set; } = """";
+    }
+}
+
+namespace MyApp.Multi.Archive
+{
+    public class Channel
+    {
+        [Key]
+        public int ChannelId { get; set; }
+        public string Name { get; set; } = """";
+    }
+}
+
+namespace MyApp
+{
+    public class MultiDbContext : DbContext
+    {
+        public MultiDbContext(DbContextOptions<MultiDbContext> o) : base(o) { }
+        public DbSet<MyApp.Multi.Notification.Channel> NotificationChannels { get; set; } = null!;
+        public DbSet<MyApp.Multi.Archive.Channel> ArchiveChannels { get; set; } = null!;
+    }
+}
+";
+        var (output, _) = RunGenerator(source);
+
+        // Both controllers must appear — no collision
+        output.Should().ContainKey("NotificationChannelController.g.cs");
+        output.Should().ContainKey("ArchiveChannelController.g.cs");
+
+        // Class names include schema prefix
+        var notifSource = output["NotificationChannelController.g.cs"];
+        notifSource.Should().Contain("class NotificationChannelController");
+        notifSource.Should().Contain("odata/Multi/Notification/NotificationChannels");
+
+        var archiveSource = output["ArchiveChannelController.g.cs"];
+        archiveSource.Should().Contain("class ArchiveChannelController");
+        archiveSource.Should().Contain("odata/Multi/Archive/ArchiveChannels");
+    }
+
+    [Fact]
+    public void Generator_NoSchemaPrefix_WhenNoSchema()
+    {
+        // Entities without a schema should NOT get a prefix
+        var (output, _) = RunGenerator(SampleDbContext);
+
+        output.Should().ContainKey("OrderController.g.cs");
+        var orderSource = output["OrderController.g.cs"];
+        orderSource.Should().Contain("class OrderController");
+        orderSource.Should().NotContain("class SalesOrderController");
     }
 
     [Fact]

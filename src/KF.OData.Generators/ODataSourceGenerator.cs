@@ -85,7 +85,8 @@ namespace KF.OData.Attributes
                 }
 
                 var controllerSource = ControllerEmitter.Emit(contextInfo, entity);
-                context.AddSource($"{entity.EntityTypeName}Controller.g.cs", controllerSource);
+                var schemaPrefix = entity.Schema?.Replace(".", "") ?? "";
+                context.AddSource($"{schemaPrefix}{entity.EntityTypeName}Controller.g.cs", controllerSource);
             }
 
             // Group entities by schema, emit one EDM configurator per group
