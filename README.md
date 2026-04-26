@@ -72,7 +72,7 @@ See [doc/SecurityGuide.md](doc/SecurityGuide.md) for details.
 
 ```powershell
 # Build and test (unit tests only)
-.\bin\build-test.ps1
+.\scr\build-test.ps1
 ```
 
 ## Solution Layout
@@ -88,7 +88,7 @@ src/
 tst/
   KF.OData.Tests/                      Unit tests (21 tests)
   KF.OData.Integration.Tests/          Integration tests against SQL Server (13 tests)
-bin/
+scr/
   build-test.ps1                       Automation script
 ```
 

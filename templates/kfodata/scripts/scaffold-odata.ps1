@@ -15,7 +15,7 @@
 
 .EXAMPLE
     .\scripts\scaffold-odata.ps1
-    .\scripts\scaffold-odata.ps1 -AssemblyPath bin\Release\net10.0\MyApp.OData.dll
+    .\scripts\scaffold-odata.ps1 -AssemblyPath scr\\Release\net10.0\MyApp.OData.dll
 #>
 param(
     [string]$AssemblyPath
