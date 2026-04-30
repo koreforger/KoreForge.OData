@@ -63,6 +63,57 @@ See [doc/UsageGuide.md](doc/UsageGuide.md) for detailed usage.
 
 See [doc/SecurityGuide.md](doc/SecurityGuide.md) for details.
 
+## Scaffolding a New OData Library
+
+The canonical `dotnet new` template for scaffolding a KoreForge OData library lives in the [KoreForge.Templates](../KoreForge.Templates) package — **not** in this repo.
+
+### Install
+
+```powershell
+dotnet new install KoreForge.Templates
+```
+
+### Scaffold
+
+```powershell
+dotnet new kf-odata -n MyCompany.OData.Staff `
+    --DatabaseShort Staff `
+    --DataNamespace MyCompany.Data.Staff `
+    -o ./MyCompany.OData.Staff
+```
+
+| Parameter | Required | Default | Description |
+|-----------|----------|---------|-------------|
+| `-n` | Yes | — | Project name and root namespace. Replaces `KF.OData.Alerts` everywhere. |
+| `--DatabaseShort` | No | `Alerts` | Short name matching the Data library (e.g. `Staff` → `StaffDbContext`). |
+| `--DataNamespace` | No | `KF.Data.Alerts` | Full namespace of the KoreForge Data library where the DbContext lives. |
+
+### Configure
+
+After scaffolding, add a `ProjectReference` to your data library in `src/<Name>/<Name>.csproj`:
+
+```xml
+<ItemGroup>
+  <ProjectReference Include="..\..\path\to\MyCompany.Data.Staff\MyCompany.Data.Staff.csproj" />
+</ItemGroup>
+```
+
+Then build — the Roslyn source generator will produce OData controllers automatically from the DbContext.
+
+### Generate controllers and run
+
+```powershell
+# Generate and verify
+dotnet build
+
+# Run scaffold script to customise route prefixes or EDM options (optional)
+./scripts/scaffold-odata.ps1
+```
+
+See the [KoreForge.Templates README](../KoreForge.Templates/README.md) for full template documentation, local development install, and release workflow.
+
+---
+
 ## Prerequisites
 
 - .NET 10 SDK
