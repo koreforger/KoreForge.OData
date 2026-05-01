@@ -1,9 +1,9 @@
 [CmdletBinding()]
 param(
     [ValidateSet('Debug', 'Release')]
-    [string]$Configuration = 'Debug'
+    [string]$Configuration = 'Release'
 )
 
 Import-Module (Join-Path $PSScriptRoot 'koreforge-build.psm1') -Force -DisableNameChecking
-Invoke-KfTest -Configuration $Configuration
+Invoke-KfBenchmark -Configuration $Configuration
 

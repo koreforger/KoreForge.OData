@@ -107,7 +107,7 @@ Then build — the Roslyn source generator will produce OData controllers automa
 dotnet build
 
 # Run scaffold script to customise route prefixes or EDM options (optional)
-./scripts/scaffold-odata.ps1
+./scr/scaffold-odata.ps1
 ```
 
 See the [KoreForge.Templates README](../KoreForge.Templates/README.md) for full template documentation, local development install, and release workflow.
@@ -146,3 +146,4 @@ scr/
 ## License
 
 MIT — see [LICENSE.md](LICENSE.md).
+
