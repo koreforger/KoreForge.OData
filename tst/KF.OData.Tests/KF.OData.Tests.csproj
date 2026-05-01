@@ -19,8 +19,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\KF.OData\KF.OData.csproj" />
-    <ProjectReference Include="..\..\src\KF.OData.Generators\KF.OData.Generators.csproj" />
+    <PackageReference Include="KoreForge.OData" VersionOverride="1.0.1-alpha" />
+    <PackageReference Include="KoreForge.OData.Generators" VersionOverride="1.0.1-alpha" />
   </ItemGroup>
 
 </Project>
