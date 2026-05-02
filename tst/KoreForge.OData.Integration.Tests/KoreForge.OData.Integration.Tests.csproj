@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <IsPackable>false</IsPackable>
@@ -17,7 +17,7 @@
     <PackageReference Include="Testcontainers.MsSql" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="KoreForge.OData" VersionOverride="1.0.1-alpha" />
-    <PackageReference Include="KoreForge.OData.Generators" VersionOverride="1.0.1-alpha" OutputItemType="Analyzer" ReferenceOutputAssembly="false" PrivateAssets="all" />
+    <PackageReference Include="KoreForge.OData" VersionOverride="1.1.2" />
+    <PackageReference Include="KoreForge.OData.Generators" VersionOverride="1.1.2" OutputItemType="Analyzer" ReferenceOutputAssembly="false" PrivateAssets="all" />
   </ItemGroup>
 </Project>
