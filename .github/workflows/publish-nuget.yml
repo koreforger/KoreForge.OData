@@ -35,8 +35,8 @@ jobs:
 
       - name: Pack
         run: |
-          dotnet pack src/KF.OData/KF.OData.csproj -c Release --no-build -o artifacts/
-          dotnet pack src/KF.OData.Generators/KF.OData.Generators.csproj -c Release --no-build -o artifacts/
+          dotnet pack src/KoreForge.OData/KoreForge.OData.csproj -c Release --no-build -o artifacts/
+          dotnet pack src/KoreForge.OData.Generators/KoreForge.OData.Generators.csproj -c Release --no-build -o artifacts/
 
       - name: Push to NuGet.org
         run: |

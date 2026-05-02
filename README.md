@@ -76,7 +76,7 @@ dotnet new install KoreForge.Templates
 ### Scaffold
 
 ```powershell
-dotnet new kf-odata -n MyCompany.OData.Staff `
+dotnet new koreforge-odata -n MyCompany.OData.Staff `
     --DatabaseShort Staff `
     --DataNamespace MyCompany.Data.Staff `
     -o ./MyCompany.OData.Staff
@@ -84,9 +84,9 @@ dotnet new kf-odata -n MyCompany.OData.Staff `
 
 | Parameter | Required | Default | Description |
 |-----------|----------|---------|-------------|
-| `-n` | Yes | — | Project name and root namespace. Replaces `KF.OData.Alerts` everywhere. |
+| `-n` | Yes | — | Project name and root namespace. Replaces `KoreForge.OData.Alerts` everywhere. |
 | `--DatabaseShort` | No | `Alerts` | Short name matching the Data library (e.g. `Staff` → `StaffDbContext`). |
-| `--DataNamespace` | No | `KF.Data.Alerts` | Full namespace of the KoreForge Data library where the DbContext lives. |
+| `--DataNamespace` | No | `KoreForge.Data.Alerts` | Full namespace of the KoreForge Data library where the DbContext lives. |
 
 ### Configure
 
@@ -130,15 +130,15 @@ See the [KoreForge.Templates README](../KoreForge.Templates/README.md) for full 
 
 ```
 src/
-  KF.OData/                           Runtime library (attributes, security, base controller, DI)
+  KoreForge.OData/                           Runtime library (attributes, security, base controller, DI)
     Attributes/                        ODataAuthorize, ODataIgnore, ODataPropertyRestriction
     Configuration/                     EDM model building and ASP.NET Core integration
     Controllers/                       KoreForgeODataController<TContext, TEntity, TKey> base class
     Security/                          Authorization, row-level filtering, property restrictions
-  KF.OData.Generators/                 Roslyn source generator (netstandard2.0)
+  KoreForge.OData.Generators/                 Roslyn source generator (netstandard2.0)
 tst/
-  KF.OData.Tests/                      Unit tests (21 tests)
-  KF.OData.Integration.Tests/          Integration tests against SQL Server (13 tests)
+  KoreForge.OData.Tests/                      Unit tests (21 tests)
+  KoreForge.OData.Integration.Tests/          Integration tests against SQL Server (13 tests)
 scr/
   build-test.ps1                       Automation script
 ```
